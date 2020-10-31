@@ -1,22 +1,16 @@
 const CustomError = require("../extensions/custom-error");
 
 module.exports = function transform(arr) {
-  // throw new CustomError('Not implemented');
-  // remove line with error and write your code here
-  // console.log(`изначальный arr = ${arr}`);
-
   if (!Array.isArray(arr)) {
     throw new Error;
 
   } else {
     let result = arr.slice();
-    // console.log(`result = ${result}`);
 
     for (let i = 0; i < result.length; i++) {
-      const previuos = result[i - 1];
+      const previous = result[i - 1];
       const current = result[i];
       const next = result[i + 1];
-      // console.log(`current = ${current}`);
 
       switch (current) {
         case `--discard-next`:
@@ -26,7 +20,7 @@ module.exports = function transform(arr) {
           break;
 
         case `--discard-prev`:
-          if (next !== undefined) {
+          if (previous !== undefined) {
             result.splice((i - 1), 1);
             i--;
           }
@@ -39,15 +33,13 @@ module.exports = function transform(arr) {
           break;
 
         case `--double-prev`:
-          if (next !== undefined) {
-            result.splice((i - 1), 0, previuos);
+          if (previous !== undefined) {
+            result.splice((i - 1), 0, previous);
             i++;
           }    
           break; 
       }  
     }
-
-    // console.log(`result после switch = ${result}`);
 
     for (let i = 0; i < result.length; i++) {
       const item = result[i];
@@ -57,8 +49,6 @@ module.exports = function transform(arr) {
         i--;
       }        
     }
-
-    // console.log(`result после удаления команд = ${result}`);
 
     return result;
   }
