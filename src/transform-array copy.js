@@ -1,16 +1,23 @@
-const CustomError = require("../extensions/custom-error");
+// Если около управляющей последовательности **нет элемента**, к которому она может быть применена, **она не делает ничего**. 
 
-module.exports = function transform(arr) {
+// if (((typeof next) === 'number') || ((typeof next) === 'object')) {
+
+
+function transform(arr) {
+  // console.log(`изначальный arr = ${arr}`);
+
   if (!Array.isArray(arr)) {
     throw new Error;
 
   } else {
     let result = arr.slice();
+    // console.log(`result = ${result}`);
 
     for (let i = 0; i < result.length; i++) {
       const previous = result[i - 1];
       const current = result[i];
       const next = result[i + 1];
+      // console.log(`current = ${current}`);
 
       switch (current) {
         case `--discard-next`:
@@ -40,6 +47,7 @@ module.exports = function transform(arr) {
           break; 
       }  
     }
+    // console.log(`result после switch = ${result}`);
 
     for (let i = 0; i < result.length; i++) {
       const item = result[i];
@@ -50,6 +58,18 @@ module.exports = function transform(arr) {
       }        
     }
 
+    // console.log(`result после удаления команд = ${result}`);
+
     return result;
   }
 };
+
+console.log(`Получили: ${transform(['--discard-prev', 1, 2, 3])}, а нужно: [1, 2, 3]`);
+console.log('------------------');
+console.log(`Получили: ${transform(['--double-prev', 1, 2, 3])}, а нужно: [1, 2, 3]`);
+console.log('------------------');
+console.log(`Получили: ${transform([1, 2, 3, '--double-next'])}, а нужно: [1, 2, 3]`);
+console.log('------------------');
+console.log(`Получили: ${transform([1, 2, 3, '--discard-next'])}, а нужно: [1, 2, 3]`);
+console.log('------------------');
+
